@@ -1,5 +1,7 @@
 import React, { ChangeEvent, Component } from 'react';
 import Table from './parts/Table.tsx';
+import ErrorBoundary from './ErrorBoundary.tsx';
+import ThrowError from './parts/ThrowError.tsx';
 import Loader from './parts/Loader.tsx';
 import './App.css';
 
@@ -77,6 +79,9 @@ class App extends Component<Record<string, never>, AppState> {
           <button className="btnSearch" onClick={this.handleOnSearch}>
             Search
           </button>
+          <ErrorBoundary>
+            <ThrowError />
+          </ErrorBoundary>
         </div>
         <div className="section big">
           {this.state.isLoading ? (
