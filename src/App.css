@@ -1,0 +1,52 @@
+#root {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border: 1px solid grey;
+}
+
+.section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.small {
+  height: 80px;
+  gap: 15px;
+  border-bottom: 1px solid grey;
+}
+
+.big {
+  height: 100%;
+  padding: 10px;
+}
+
+.btnSearch {
+  height: 24px;
+  width: 100px;
+}
+
+.table {
+  display: grid;
+  grid-template-columns: 1fr 2fr 2fr;
+  width: 100%;
+}
+
+.tableCol {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.tableHeader {
+  font-weight: bold;
+}
