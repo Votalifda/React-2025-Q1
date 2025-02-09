@@ -1,4 +1,4 @@
-import { FC, Fragment } from 'react';
+import React, { FC, Fragment } from 'react';
 import { ITableItem } from '../types.ts';
 import '../App.css';
 
@@ -11,6 +11,7 @@ const Card: FC<Props> = ({ item, handleOnCardClick }) => {
   const { id, name, gender, birth_year } = item;
   const handleCardClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
+    e.stopPropagation();
     handleOnCardClick(id);
   };
   return (

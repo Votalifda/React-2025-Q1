@@ -2,58 +2,66 @@ import { useCallback, useEffect, useState } from 'react';
 import CardList from './parts/CardList.tsx';
 import { ITableItem } from './types.ts';
 import Loader from './parts/Loader.tsx';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
 import { useSearch } from './useSearch.ts';
 import SearchPanel from './parts/SearchPanel.tsx';
+import { getIdFromUrl } from './helpers.ts';
 import './App.css';
-import { useHelpers } from './useHelpers.ts';
 
 const App = () => {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = searchParams.get('page') ?? '1';
   const [items, setItems] = useState<Array<ITableItem>>([]);
+  const [total, setTotal] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const { search, setSearchValue } = useSearch();
-  const { getIdFromUrl } = useHelpers();
 
-  const fetchPeople = useCallback(async () => {
-    try {
-      setIsLoading(true);
-      const response = await fetch(
-        `https://swapi.dev/api/people?search=${search.trim()}`
-      );
-      if (!response.ok) {
-        throw new Error('Network response error');
+  const fetchPeople = useCallback(
+    async (search: string) => {
+      try {
+        setIsLoading(true);
+        const response = await fetch(
+          `https://swapi.dev/api/people?page=${page}&search=${search.trim()}`
+        );
+        if (!response.ok) {
+          throw new Error('Network response error');
+        }
+        const data = await response.json();
+        const items: Array<ITableItem> = data?.results || [];
+
+        setIsLoading(false);
+        setItems(
+          items.map((item) => ({
+            id: getIdFromUrl(item.url),
+            url: item.url,
+            name: item.name,
+            gender: item.gender,
+            birth_year: item.birth_year,
+          }))
+        );
+        setTotal(data?.count);
+      } catch (error) {
+        setIsLoading(false);
+        console.error('Error fetching data:', error);
       }
-      const data = await response.json();
-      const items: Array<ITableItem> = data?.results || [];
-
-      setIsLoading(false);
-      setItems(
-        items.map((item) => ({
-          id: getIdFromUrl(item.url),
-          url: item.url,
-          name: item.name,
-          gender: item.gender,
-          birth_year: item.birth_year,
-        }))
-      );
-    } catch (error) {
-      setIsLoading(false);
-      console.error('Error fetching data:', error);
-    }
-  }, [search, getIdFromUrl]);
+    },
+    [page]
+  );
 
   useEffect(() => {
-    fetchPeople().then();
+    fetchPeople('').then();
   }, [fetchPeople]);
 
   const handleOnSearch = () => {
-    fetchPeople().then();
+    searchParams.set('page', '1');
+    setSearchParams(searchParams);
+    navigate(`/?${searchParams.toString()}`);
+    fetchPeople(search).then();
   };
 
   const handleOnCardClick = (id: string) => {
-    console.log('handleOnCardClick ID', id);
-    navigate(`/details/${id}`);
+    navigate(`/details/${id}?${searchParams.toString()}`);
   };
 
   return (
@@ -67,8 +75,12 @@ const App = () => {
         {isLoading ? (
           <Loader />
         ) : (
-          <div className="cards-wrapper">
-            <CardList items={items} handleOnCardClick={handleOnCardClick} />
+          <div className="results">
+            <CardList
+              items={items}
+              handleOnCardClick={handleOnCardClick}
+              total={total}
+            />
             <Outlet />
           </div>
         )}

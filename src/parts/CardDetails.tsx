@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { IPeopleDetails } from '../types.ts';
 import Loader from './Loader.tsx';
-import { useHelpers } from '../useHelpers.ts';
+import { getIdFromUrl } from '../helpers.ts';
 import '../App.css';
 
 const CardDetailsRow = ({
@@ -22,41 +22,38 @@ const CardDetailsRow = ({
 
 const CardDetails = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { id } = useParams();
-  const { getIdFromUrl } = useHelpers();
   const [isLoading, setIsLoading] = useState(false);
   const [item, setItem] = useState<IPeopleDetails>();
 
-  const fetchPeopleDetails = useCallback(
-    async (id: string) => {
-      try {
-        setIsLoading(true);
-        const response = await fetch(`https://swapi.dev/api/people/${id}`);
-        if (!response.ok) {
-          throw new Error('Network response error');
-        }
-        const data: IPeopleDetails = await response.json();
-
-        setIsLoading(false);
-        setItem({
-          id: getIdFromUrl(data?.url ?? ''),
-          url: data.url,
-          name: data.name,
-          gender: data.gender,
-          birth_year: data.birth_year,
-          eye_color: data.eye_color,
-          hair_color: data.hair_color,
-          skin_color: data.skin_color,
-          height: data.height,
-          mass: data.mass,
-        });
-      } catch (error) {
-        setIsLoading(false);
-        console.error('Error fetching data:', error);
+  const fetchPeopleDetails = useCallback(async (id: string) => {
+    try {
+      setIsLoading(true);
+      const response = await fetch(`https://swapi.dev/api/people/${id}`);
+      if (!response.ok) {
+        throw new Error('Network response error');
       }
-    },
-    [getIdFromUrl]
-  );
+      const data: IPeopleDetails = await response.json();
+
+      setIsLoading(false);
+      setItem({
+        id: getIdFromUrl(data?.url ?? ''),
+        url: data.url,
+        name: data.name,
+        gender: data.gender,
+        birth_year: data.birth_year,
+        eye_color: data.eye_color,
+        hair_color: data.hair_color,
+        skin_color: data.skin_color,
+        height: data.height,
+        mass: data.mass,
+      });
+    } catch (error) {
+      setIsLoading(false);
+      console.error('Error fetching data:', error);
+    }
+  }, []);
 
   useEffect(() => {
     if (id) {
@@ -65,7 +62,7 @@ const CardDetails = () => {
   }, [id, fetchPeopleDetails]);
 
   const handleClose = () => {
-    navigate(`/`);
+    navigate(`/?${searchParams.toString()}`);
   };
 
   return (
