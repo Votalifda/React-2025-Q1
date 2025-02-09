@@ -2,7 +2,7 @@ import { FC, Fragment } from 'react';
 import { ITableItem } from '../types.ts';
 import '../App.css';
 
-const Row: FC<{ item: ITableItem }> = ({ item }) => {
+const Card: FC<{ item: ITableItem }> = ({ item }) => {
   const { name, gender, birth_year } = item;
   return (
     <Fragment>
@@ -13,4 +13,4 @@ const Row: FC<{ item: ITableItem }> = ({ item }) => {
   );
 };
 
-export default Row;
+export default Card;

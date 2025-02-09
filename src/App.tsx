@@ -1,16 +1,15 @@
-import { ChangeEvent, useCallback, useEffect, useState } from 'react';
-import Table from './parts/Table.tsx';
+import { useCallback, useEffect, useState } from 'react';
+import CardList from './parts/CardList.tsx';
 import { ITableItem } from './types.ts';
-import ErrorBoundary from './ErrorBoundary.tsx';
-import ThrowError from './parts/ThrowError.tsx';
 import Loader from './parts/Loader.tsx';
 import { useSearch } from './useSearch.ts';
+import SearchPanel from './parts/SearchPanel.tsx';
 import './App.css';
 
 const App = () => {
   const [items, setItems] = useState<Array<ITableItem>>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const { search, setSearch } = useSearch();
+  const { search, setSearchValue } = useSearch();
 
   const fetchEpisodes = useCallback(async () => {
     try {
@@ -42,28 +41,19 @@ const App = () => {
     fetchEpisodes().then();
   }, [fetchEpisodes]);
 
-  const onSearchInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearch(e.target.value);
-  };
-
   const handleOnSearch = () => {
     fetchEpisodes().then();
   };
 
   return (
     <div className="wrapper">
-      <div className="section small">
-        <label>Search:</label>
-        <input onChange={(e) => onSearchInputChange(e)} value={search} />
-        <button className="btnSearch" onClick={handleOnSearch}>
-          Search
-        </button>
-        <ErrorBoundary>
-          <ThrowError />
-        </ErrorBoundary>
-      </div>
+      <SearchPanel
+        search={search}
+        setSearchValue={setSearchValue}
+        handleOnSearch={handleOnSearch}
+      />
       <div className="section big">
-        {isLoading ? <Loader /> : <Table items={items} />}
+        {isLoading ? <Loader /> : <CardList items={items} />}
       </div>
     </div>
   );

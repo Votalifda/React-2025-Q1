@@ -1,17 +1,15 @@
 import { useState } from 'react';
 
 export const useSearch = () => {
-  const [search, setSearchValue] = useState(
-    localStorage.getItem('search') || ''
-  );
+  const [search, setSearch] = useState(localStorage.getItem('search') || '');
 
-  const setSearch = (value: string) => {
+  const setSearchValue = (value: string) => {
     localStorage.setItem('search', value);
-    setSearchValue(value);
+    setSearch(value);
   };
 
   return {
     search,
-    setSearch,
+    setSearchValue,
   };
 };
