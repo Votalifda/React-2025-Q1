@@ -84,7 +84,11 @@ const CardDetails = () => {
             <CardDetailsRow title="Height" value={item?.height} />
             <CardDetailsRow title="Mass" value={item?.mass} />
           </ul>
-          <button className="btn-close" onClick={handleClose}>
+          <button
+            className="btn-close"
+            onClick={handleClose}
+            data-testid="close-btn"
+          >
             Close
           </button>
         </>

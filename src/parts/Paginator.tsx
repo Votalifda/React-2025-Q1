@@ -24,7 +24,7 @@ const Paginator: FC<Props> = ({ total, ipp = 10 }) => {
   };
 
   return (
-    <div className="paginator">
+    <div className="paginator" data-testid="paginator">
       {pagesArray &&
         pagesArray.map((item) => (
           <button
