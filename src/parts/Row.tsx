@@ -1,4 +1,4 @@
-import React, { FC, Fragment } from 'react';
+import { FC, Fragment } from 'react';
 import { ITableItem } from '../types.ts';
 import '../App.css';
 

@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import { ITableItems } from '../types.ts';
 import Row from './Row.tsx';
 import '../App.css';
