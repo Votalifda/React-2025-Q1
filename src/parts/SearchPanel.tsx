@@ -22,7 +22,7 @@ const SearchPanel: FC<Props> = ({ search, setSearchValue, handleOnSearch }) => {
   };
 
   return (
-    <div className="section small" onClick={handleClose}>
+    <div className="section small" onClick={handleClose} data-testid="search">
       <label>Search:</label>
       <input onChange={(e) => onSearchInputChange(e)} value={search} />
       <button className="btnSearch" onClick={handleOnSearch}>
