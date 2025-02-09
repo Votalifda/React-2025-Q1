@@ -2,11 +2,22 @@ import { FC, Fragment } from 'react';
 import { ITableItem } from '../types.ts';
 import '../App.css';
 
-const Card: FC<{ item: ITableItem }> = ({ item }) => {
-  const { name, gender, birth_year } = item;
+interface Props {
+  item: ITableItem;
+  handleOnCardClick: (url: string) => void;
+}
+
+const Card: FC<Props> = ({ item, handleOnCardClick }) => {
+  const { id, name, gender, birth_year } = item;
+  const handleCardClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    handleOnCardClick(id);
+  };
   return (
     <Fragment>
-      <div className="tableCol">{name}</div>
+      <a href="#" onClick={handleCardClick} className="tableCol">
+        {name}
+      </a>
       <div className="tableCol">{gender}</div>
       <div className="tableCol">{birth_year}</div>
     </Fragment>

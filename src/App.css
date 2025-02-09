@@ -28,7 +28,6 @@
 
 .big {
   height: 100%;
-  padding: 10px;
 }
 
 .btnSearch {
@@ -38,8 +37,9 @@
 
 .table {
   display: grid;
-  grid-template-columns: 1fr 2fr 2fr;
+  grid-template-columns: 2fr 1fr 2fr;
   width: 100%;
+  padding: 10px;
 }
 
 .tableCol {
@@ -49,4 +49,38 @@
 
 .tableHeader {
   font-weight: bold;
+}
+
+.card {
+  border: 1px solid grey;
+}
+
+.cards-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.card-details {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  /*min-height: 100%;*/
+  /*height: 100%;*/
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid grey;
+}
+
+.btn-close {
+  display: flex;
+  align-self: center;
+  width: 70px;
+  justify-content: center;
+}
+
+.params {
+  list-style: none;
+  text-align: left;
 }

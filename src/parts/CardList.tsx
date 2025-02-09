@@ -1,9 +1,14 @@
 import { FC } from 'react';
-import { ITableItems } from '../types.ts';
+import { ITableItem } from '../types.ts';
 import Card from './Card.tsx';
 import '../App.css';
 
-const CardList: FC<ITableItems> = ({ items }) => {
+interface Props {
+  items: Array<ITableItem>;
+  handleOnCardClick: (url: string) => void;
+}
+
+const CardList: FC<Props> = ({ items, handleOnCardClick }) => {
   return (
     <div className="table">
       <div className="tableCol tableHeader">Name</div>
@@ -13,6 +18,7 @@ const CardList: FC<ITableItems> = ({ items }) => {
         <Card
           key={`${item.name}_${item.gender}_${item.birth_year}`}
           item={item}
+          handleOnCardClick={handleOnCardClick}
         />
       ))}
     </div>

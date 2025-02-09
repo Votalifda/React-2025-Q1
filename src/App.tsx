@@ -2,16 +2,20 @@ import { useCallback, useEffect, useState } from 'react';
 import CardList from './parts/CardList.tsx';
 import { ITableItem } from './types.ts';
 import Loader from './parts/Loader.tsx';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { useSearch } from './useSearch.ts';
 import SearchPanel from './parts/SearchPanel.tsx';
 import './App.css';
+import { useHelpers } from './useHelpers.ts';
 
 const App = () => {
+  const navigate = useNavigate();
   const [items, setItems] = useState<Array<ITableItem>>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { search, setSearchValue } = useSearch();
+  const { getIdFromUrl } = useHelpers();
 
-  const fetchEpisodes = useCallback(async () => {
+  const fetchPeople = useCallback(async () => {
     try {
       setIsLoading(true);
       const response = await fetch(
@@ -26,6 +30,8 @@ const App = () => {
       setIsLoading(false);
       setItems(
         items.map((item) => ({
+          id: getIdFromUrl(item.url),
+          url: item.url,
           name: item.name,
           gender: item.gender,
           birth_year: item.birth_year,
@@ -35,14 +41,19 @@ const App = () => {
       setIsLoading(false);
       console.error('Error fetching data:', error);
     }
-  }, [search]);
+  }, [search, getIdFromUrl]);
 
   useEffect(() => {
-    fetchEpisodes().then();
-  }, [fetchEpisodes]);
+    fetchPeople().then();
+  }, [fetchPeople]);
 
   const handleOnSearch = () => {
-    fetchEpisodes().then();
+    fetchPeople().then();
+  };
+
+  const handleOnCardClick = (id: string) => {
+    console.log('handleOnCardClick ID', id);
+    navigate(`/details/${id}`);
   };
 
   return (
@@ -53,7 +64,14 @@ const App = () => {
         handleOnSearch={handleOnSearch}
       />
       <div className="section big">
-        {isLoading ? <Loader /> : <CardList items={items} />}
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <div className="cards-wrapper">
+            <CardList items={items} handleOnCardClick={handleOnCardClick} />
+            <Outlet />
+          </div>
+        )}
       </div>
     </div>
   );
