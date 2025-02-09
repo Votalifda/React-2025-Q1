@@ -1,31 +1,22 @@
-import React, { Component } from 'react';
-import '../App.css';
+import React, { FC } from 'react';
+import { ITableItems } from '../types.ts';
 import Row from './Row.tsx';
+import '../App.css';
 
-interface AppState {
-  items: Array<{
-    name: string;
-    gender: string;
-    birth_year: string;
-  }>;
-}
-
-class Table extends Component<AppState, Record<string, never>> {
-  render() {
-    return (
-      <div className="table">
-        <div className="tableCol tableHeader">Name</div>
-        <div className="tableCol tableHeader">Gender</div>
-        <div className="tableCol tableHeader">Birth Year</div>
-        {this.props.items.map((item) => (
-          <Row
-            key={`${item.name}_${item.gender}_${item.birth_year}`}
-            item={item}
-          />
-        ))}
-      </div>
-    );
-  }
-}
+const Table: FC<ITableItems> = ({ items }) => {
+  return (
+    <div className="table">
+      <div className="tableCol tableHeader">Name</div>
+      <div className="tableCol tableHeader">Gender</div>
+      <div className="tableCol tableHeader">Birth Year</div>
+      {items.map((item) => (
+        <Row
+          key={`${item.name}_${item.gender}_${item.birth_year}`}
+          item={item}
+        />
+      ))}
+    </div>
+  );
+};
 
 export default Table;

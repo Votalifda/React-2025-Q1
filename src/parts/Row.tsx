@@ -1,25 +1,16 @@
-import React, { Component, Fragment } from 'react';
+import React, { FC, Fragment } from 'react';
+import { ITableItem } from '../types.ts';
 import '../App.css';
 
-interface Props {
-  item: {
-    name: string;
-    gender: string;
-    birth_year: string;
-  };
-}
-
-class Row extends Component<Props, Record<string, never>> {
-  render() {
-    const { name, gender, birth_year } = this.props.item;
-    return (
-      <Fragment>
-        <div className="tableCol">{name}</div>
-        <div className="tableCol">{gender}</div>
-        <div className="tableCol">{birth_year}</div>
-      </Fragment>
-    );
-  }
-}
+const Row: FC<{ item: ITableItem }> = ({ item }) => {
+  const { name, gender, birth_year } = item;
+  return (
+    <Fragment>
+      <div className="tableCol">{name}</div>
+      <div className="tableCol">{gender}</div>
+      <div className="tableCol">{birth_year}</div>
+    </Fragment>
+  );
+};
 
 export default Row;
