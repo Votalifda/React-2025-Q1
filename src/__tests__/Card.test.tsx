@@ -3,6 +3,8 @@ import { describe, it, expect, vi } from 'vitest';
 import Card from '../parts/Card';
 import { ITableItem } from '../types';
 import './setupTests';
+import { store } from "../store/store.ts";
+import { Provider } from "react-redux";
 
 const mockItem: ITableItem = {
   id: '1',
@@ -16,7 +18,11 @@ describe('Card component', () => {
   const handleOnCardClick = vi.fn();
 
   it('renders Card component with correct data', () => {
-    render(<Card item={mockItem} handleOnCardClick={handleOnCardClick} />);
+    render(
+        <Provider store={store}>
+          <Card item={mockItem} handleOnCardClick={handleOnCardClick} />
+        </Provider>
+      );
 
     expect(screen.getByText('Luke Skywalker')).toBeInTheDocument();
     expect(screen.getByText('male')).toBeInTheDocument();
@@ -24,7 +30,11 @@ describe('Card component', () => {
   });
 
   it('calls handleOnCardClick with correct id when clicked', () => {
-    render(<Card item={mockItem} handleOnCardClick={handleOnCardClick} />);
+    render(
+        <Provider store={store}>
+          <Card item={mockItem} handleOnCardClick={handleOnCardClick} />
+        </Provider>
+      );
 
     const linkElement = screen.getByText('Luke Skywalker');
     fireEvent.click(linkElement);

@@ -2,6 +2,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { vi } from 'vitest';
 import { BrowserRouter } from 'react-router-dom';
 import SearchPanel from '../parts/SearchPanel';
+import {ThemeProvider} from "../providers/ThemeProvider.tsx";
 
 describe('SearchPanel Component', () => {
   const mockSetSearchValue = vi.fn();
@@ -9,13 +10,15 @@ describe('SearchPanel Component', () => {
 
   const setup = () => {
     render(
-        <BrowserRouter>
-          <SearchPanel
-              search="test"
-              setSearchValue={mockSetSearchValue}
-              handleOnSearch={mockHandleOnSearch}
-          />
-        </BrowserRouter>
+        <ThemeProvider>
+          <BrowserRouter>
+            <SearchPanel
+                search="test"
+                setSearchValue={mockSetSearchValue}
+                handleOnSearch={mockHandleOnSearch}
+            />
+          </BrowserRouter>
+        </ThemeProvider>
     );
   };
 

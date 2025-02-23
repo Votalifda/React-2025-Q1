@@ -11,13 +11,18 @@ export const api = createApi({
     >({
       query: ({ page, search }) =>
         `/people?page=${page}&search=${search?.trim()}`,
-      transformResponse: (res: IResponse<Array<ITableItem>>) => ({
-        ...res,
-        results: res.results.map((item) => ({
-          ...item,
-          id: getIdFromUrl(item.url),
-        })),
-      }),
+      transformResponse: (res: IResponse<Array<ITableItem>>) => {
+        if (!res || !res.results) {
+          throw new Error('Error API response');
+        }
+        return {
+          ...res,
+          results: res.results.map((item) => ({
+            ...item,
+            id: getIdFromUrl(item.url),
+          })),
+        };
+      },
     }),
     getItem: builder.query<IPeopleDetails, { id: string }>({
       query: ({ id }) => `/people/${id}`,

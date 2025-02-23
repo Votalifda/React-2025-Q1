@@ -4,6 +4,8 @@ import { BrowserRouter } from 'react-router-dom';
 import CardList from '../parts/CardList';
 import { describe, it, expect, vi } from 'vitest';
 import { ITableItem } from '../types.ts';
+import { Provider } from "react-redux";
+import { store } from "../store/store.ts";
 
 const mockItems: Array<ITableItem> = [
   {
@@ -27,13 +29,15 @@ describe('CardList component', () => {
 
   it('should render CardList with correct items', () => {
     render(
-      <BrowserRouter>
-        <CardList
-          items={mockItems}
-          handleOnCardClick={handleOnCardClick}
-          total={2}
-        />
-      </BrowserRouter>
+        <Provider store={store}>
+          <BrowserRouter>
+            <CardList
+                items={mockItems}
+                handleOnCardClick={handleOnCardClick}
+                total={2}
+            />
+          </BrowserRouter>
+        </Provider>
     );
 
     expect(screen.getByText(/Name/i)).toBeInTheDocument();
@@ -43,13 +47,15 @@ describe('CardList component', () => {
 
   it('should call navigate function when wrapper is clicked', () => {
     const { container } = render(
-      <BrowserRouter>
-        <CardList
-          items={mockItems}
-          handleOnCardClick={handleOnCardClick}
-          total={2}
-        />
-      </BrowserRouter>
+        <Provider store={store}>
+          <BrowserRouter>
+            <CardList
+                items={mockItems}
+                handleOnCardClick={handleOnCardClick}
+                total={2}
+            />
+          </BrowserRouter>
+        </Provider>
     );
 
     fireEvent.click(container.querySelector('.cards-wrapper')!);
@@ -57,13 +63,15 @@ describe('CardList component', () => {
 
   it('should render the correct number of Card components', () => {
     render(
-      <BrowserRouter>
-        <CardList
-          items={mockItems}
-          handleOnCardClick={handleOnCardClick}
-          total={2}
-        />
-      </BrowserRouter>
+        <Provider store={store}>
+          <BrowserRouter>
+            <CardList
+                items={mockItems}
+                handleOnCardClick={handleOnCardClick}
+                total={2}
+            />
+          </BrowserRouter>
+        </Provider>
     );
 
     const cardElements = screen.getAllByText(/19BBY/i);
@@ -72,13 +80,15 @@ describe('CardList component', () => {
 
   it('should handle card click correctly', () => {
     render(
-      <BrowserRouter>
-        <CardList
-          items={mockItems}
-          handleOnCardClick={handleOnCardClick}
-          total={2}
-        />
-      </BrowserRouter>
+        <Provider store={store}>
+          <BrowserRouter>
+            <CardList
+                items={mockItems}
+                handleOnCardClick={handleOnCardClick}
+                total={2}
+            />
+          </BrowserRouter>
+        </Provider>
     );
 
     const card = screen.getByText('Luke Skywalker');
@@ -89,13 +99,15 @@ describe('CardList component', () => {
 
   it('should render Paginator component', () => {
     render(
-      <BrowserRouter>
-        <CardList
-          items={mockItems}
-          handleOnCardClick={handleOnCardClick}
-          total={2}
-        />
-      </BrowserRouter>
+        <Provider store={store}>
+          <BrowserRouter>
+            <CardList
+                items={mockItems}
+                handleOnCardClick={handleOnCardClick}
+                total={2}
+            />
+          </BrowserRouter>
+        </Provider>
     );
 
     const paginatorElement = screen.getByTestId('paginator');
