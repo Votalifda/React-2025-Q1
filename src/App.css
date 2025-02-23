@@ -1,15 +1,21 @@
 #root {
   width: 100%;
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
 }
 
 .wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+  height: 100vh;
+}
+
+.content {
   display: flex;
   flex-direction: column;
   width: 100%;
+  height: fit-content;
+  max-width: 1280px;
   border: 1px solid grey;
 }
 
@@ -100,6 +106,7 @@
 .paginator-btn {
   width: 40px;
   height: 30px;
+  border: 1px solid grey;
 }
 
 .paginator-btn.active {
@@ -116,4 +123,15 @@
 .flyout-wrapper {
   display: flex;
   gap: 10px
+}
+
+.themePanel {
+  display: flex;
+  gap: 5px;
+  margin-left: 100px;
+}
+
+.theme-dark {
+  background-color: #232323;
+  color: white;
 }

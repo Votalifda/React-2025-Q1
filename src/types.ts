@@ -25,3 +25,5 @@ export interface IResponse<T> {
   previous: string;
   results: T;
 }
+
+export type Theme = 'light' | 'dark';

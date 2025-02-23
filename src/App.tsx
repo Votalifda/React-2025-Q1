@@ -5,6 +5,7 @@ import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
 import { useSearch } from './useSearch.ts';
 import SearchPanel from './parts/SearchPanel.tsx';
 import { useGetItemsQuery } from './api/api.ts';
+import { useTheme } from './context/ThemeContext.tsx';
 import './App.css';
 
 const App = () => {
@@ -13,10 +14,7 @@ const App = () => {
   const page = searchParams.get('page') ?? '1';
   const { search, setSearchValue } = useSearch();
   const { data, isLoading } = useGetItemsQuery({ page, search });
-  // const dispatch = useDispatch();
-  // const selectedItems = useSelector(
-  //   (state: RootState) => state.selectedItems.items
-  // );
+  const { theme } = useTheme();
 
   const items = useMemo(() => {
     return data ? data.results : [];
@@ -31,27 +29,29 @@ const App = () => {
   const handleOnCardClick = (id: string) => {
     navigate(`/details/${id}?${searchParams.toString()}`);
   };
-  console.log('items', items);
+
   return (
-    <div className="wrapper">
-      <SearchPanel
-        search={search}
-        setSearchValue={setSearchValue}
-        handleOnSearch={handleOnSearch}
-      />
-      <div className="section big">
-        {isLoading ? (
-          <Loader />
-        ) : (
-          <div className="results">
-            <CardList
-              items={items}
-              handleOnCardClick={handleOnCardClick}
-              total={data?.count ? +data.count : 0}
-            />
-            <Outlet />
-          </div>
-        )}
+    <div className={`wrapper ${theme === 'dark' ? 'theme-dark' : ''}`}>
+      <div className="content">
+        <SearchPanel
+          search={search}
+          setSearchValue={setSearchValue}
+          handleOnSearch={handleOnSearch}
+        />
+        <div className="section big">
+          {isLoading ? (
+            <Loader />
+          ) : (
+            <div className="results">
+              <CardList
+                items={items}
+                handleOnCardClick={handleOnCardClick}
+                total={data?.count ? +data.count : 0}
+              />
+              <Outlet />
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
