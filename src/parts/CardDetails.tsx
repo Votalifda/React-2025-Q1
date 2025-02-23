@@ -23,7 +23,16 @@ const CardDetails = () => {
   const [searchParams] = useSearchParams();
   const { id } = useParams();
   const { data: item, isLoading } = useGetItemQuery({ id: `${id}` });
-
+  const rows = [
+    { title: 'Name', value: item?.name ?? '' },
+    { title: 'Gender', value: item?.gender ?? '' },
+    { title: 'Birth Year', value: item?.birth_year || '' },
+    { title: 'Eye Color', value: item?.eye_color || '' },
+    { title: 'Hair Color', value: item?.hair_color || '' },
+    { title: 'Skin Color', value: item?.skin_color || '' },
+    { title: 'Skin Color', value: item?.height || '' },
+    { title: 'Mass', value: item?.mass || '' },
+  ];
   const handleClose = () => {
     navigate(`/?${searchParams.toString()}`);
   };
@@ -38,14 +47,13 @@ const CardDetails = () => {
             <b>Card Details</b>
           </div>
           <ul className="params">
-            <CardDetailsRow title="Name" value={item?.name} />
-            <CardDetailsRow title="Gender" value={item?.gender} />
-            <CardDetailsRow title="Birth Year" value={item?.birth_year} />
-            <CardDetailsRow title="Eye Color" value={item?.eye_color} />
-            <CardDetailsRow title="Hair Color" value={item?.hair_color} />
-            <CardDetailsRow title="Skin Color" value={item?.skin_color} />
-            <CardDetailsRow title="Height" value={item?.height} />
-            <CardDetailsRow title="Mass" value={item?.mass} />
+            {rows.map((item) => (
+              <CardDetailsRow
+                key={`${item.title}-${item.value}`}
+                title={item.title}
+                value={item.value}
+              />
+            ))}
           </ul>
           <button
             className="btn-close"

@@ -52,27 +52,27 @@ describe('CardDetails', () => {
     expect(screen.getByTestId('loader')).toBeInTheDocument();
   });
 
-  it('displays fetched data', async () => {
-    (fetch as jest.Mock).mockResolvedValueOnce(mockFetchResponse);
-
-    await act(async () => {
-      render(
-          <Provider store={store}>
-            <MemoryRouter initialEntries={['/details/1']}>
-              <Routes>
-                <Route path="/details/:id" element={<CardDetails />} />
-              </Routes>
-            </MemoryRouter>
-          </Provider>
-      );
-    });
-
-    await waitFor(() => expect(screen.queryByTestId('loader')).not.toBeInTheDocument());
-
-    expect(screen.getByText('Name:')).toBeInTheDocument();
-    expect(screen.getByText('Gender:')).toBeInTheDocument();
-    expect(screen.getByText('Birth Year:')).toBeInTheDocument();
-  });
+  // it('displays fetched data', async () => {
+  //   (fetch as jest.Mock).mockResolvedValueOnce(mockFetchResponse);
+  //
+  //   await act(async () => {
+  //     render(
+  //         <Provider store={store}>
+  //           <MemoryRouter initialEntries={['/details/1']}>
+  //             <Routes>
+  //               <Route path="/details/:id" element={<CardDetails />} />
+  //             </Routes>
+  //           </MemoryRouter>
+  //         </Provider>
+  //     );
+  //   });
+  //
+  //   await waitFor(() => expect(screen.queryByTestId('loader')).not.toBeInTheDocument());
+  //
+  //   expect(screen.getByText('Name:')).toBeInTheDocument();
+  //   expect(screen.getByText('Gender:')).toBeInTheDocument();
+  //   expect(screen.getByText('Birth Year:')).toBeInTheDocument();
+  // });
 
   it('navigates back on close button click', async () => {
     (fetch as jest.Mock).mockResolvedValueOnce(mockFetchResponse);
@@ -119,4 +119,30 @@ describe('CardDetails', () => {
     await waitFor(() => expect(screen.queryByTestId('loader')).not.toBeInTheDocument());
 
   });
+
+
+  it('displays fetched data', async () => {
+    (fetch as jest.Mock).mockResolvedValueOnce(mockFetchResponse);
+
+    await act(async () => {
+      render(
+          <Provider store={store}>
+            <MemoryRouter initialEntries={['/details/1']}>
+              <Routes>
+                <Route path="/details/:id" element={<CardDetails />} />
+              </Routes>
+            </MemoryRouter>
+          </Provider>
+      );
+    });
+
+    await waitFor(() => expect(screen.queryByTestId('loader')).not.toBeInTheDocument());
+
+    expect(screen.getByText(/Name/)).toBeInTheDocument();
+    expect(screen.getByText(/Gender/)).toBeInTheDocument();
+    expect(screen.getByText(/Birth/)).toBeInTheDocument();
+    expect(screen.getByText(/Hair/)).toBeInTheDocument();
+    expect(screen.getByText(/Mass/)).toBeInTheDocument();
+  });
+
 });
