@@ -1,7 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { ITableItem } from './../../types.ts';
 
 interface SelectedItemsState {
-  items: string[];
+  items: ITableItem[];
 }
 
 const initialState: SelectedItemsState = {
@@ -12,11 +13,11 @@ const selectedItemsSlice = createSlice({
   name: 'selectedItems',
   initialState,
   reducers: {
-    addItem: (state, action: PayloadAction<string>) => {
+    addItem: (state, action: PayloadAction<ITableItem>) => {
       state.items.push(action.payload);
     },
-    removeItem: (state, action: PayloadAction<string>) => {
-      state.items = state.items.filter((id) => id !== action.payload);
+    removeItem: (state, action: PayloadAction<ITableItem>) => {
+      state.items = state.items.filter((item) => item.id !== action.payload.id);
     },
     clearItems: (state) => {
       state.items = [];

@@ -37,7 +37,7 @@
 
 .table {
   display: grid;
-  grid-template-columns: 2fr 1fr 2fr;
+  grid-template-columns: 40px 2fr 1fr 2fr;
   width: 100%;
 }
 
@@ -111,4 +111,9 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
+}
+
+.flyout-wrapper {
+  display: flex;
+  gap: 10px
 }
