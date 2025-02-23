@@ -1,19 +1,28 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-
-interface Item {
-  id: string;
-  name: string;
-  description: string;
-  detailsUrl: string;
-}
+import { IPeopleDetails, IResponse, ITableItem } from '../types.ts';
+import { getIdFromUrl } from '../helpers.ts';
 
 export const api = createApi({
-  baseQuery: fetchBaseQuery({ baseUrl: 'https://api.example.com' }),
+  baseQuery: fetchBaseQuery({ baseUrl: 'https://swapi.dev/api' }),
   endpoints: (builder) => ({
-    getItems: builder.query<Item[], () => void>({
-      query: () => '/items',
+    getItems: builder.query<
+      IResponse<Array<ITableItem>>,
+      { page: string; search: string }
+    >({
+      query: ({ page, search }) =>
+        `/people?page=${page}&search=${search?.trim()}`,
+      transformResponse: (res: IResponse<Array<ITableItem>>) => ({
+        ...res,
+        results: res.results.map((item) => ({
+          ...item,
+          id: getIdFromUrl(item.url),
+        })),
+      }),
+    }),
+    getItem: builder.query<IPeopleDetails, { id: string }>({
+      query: ({ id }) => `/people/${id}`,
     }),
   }),
 });
 
-export const { useGetItemsQuery } = api;
+export const { useGetItemsQuery, useGetItemQuery } = api;

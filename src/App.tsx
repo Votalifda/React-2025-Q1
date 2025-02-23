@@ -1,69 +1,37 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import CardList from './parts/CardList.tsx';
-import { ITableItem } from './types.ts';
 import Loader from './parts/Loader.tsx';
 import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
 import { useSearch } from './useSearch.ts';
 import SearchPanel from './parts/SearchPanel.tsx';
-import { getIdFromUrl } from './helpers.ts';
+import { useGetItemsQuery } from './api/api.ts';
 import './App.css';
 
 const App = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const page = searchParams.get('page') ?? '1';
-  const [items, setItems] = useState<Array<ITableItem>>([]);
-  const [total, setTotal] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
   const { search, setSearchValue } = useSearch();
+  const { data, isLoading } = useGetItemsQuery({ page, search });
+  // const dispatch = useDispatch();
+  // const selectedItems = useSelector(
+  //   (state: RootState) => state.selectedItems.items
+  // );
 
-  const fetchPeople = useCallback(
-    async (search: string) => {
-      try {
-        setIsLoading(true);
-        const response = await fetch(
-          `https://swapi.dev/api/people?page=${page}&search=${search.trim()}`
-        );
-        if (!response.ok) {
-          throw new Error('Network response error');
-        }
-        const data = await response.json();
-        const items: Array<ITableItem> = data?.results || [];
-
-        setIsLoading(false);
-        setItems(
-          items.map((item) => ({
-            id: getIdFromUrl(item.url),
-            url: item.url,
-            name: item.name,
-            gender: item.gender,
-            birth_year: item.birth_year,
-          }))
-        );
-        setTotal(data?.count);
-      } catch (error) {
-        setIsLoading(false);
-        console.error('Error fetching data:', error);
-      }
-    },
-    [page]
-  );
-
-  useEffect(() => {
-    fetchPeople('').then();
-  }, [fetchPeople]);
+  const items = useMemo(() => {
+    return data ? data.results : [];
+  }, [data]);
 
   const handleOnSearch = () => {
     searchParams.set('page', '1');
     setSearchParams(searchParams);
     navigate(`/?${searchParams.toString()}`);
-    fetchPeople(search).then();
   };
 
   const handleOnCardClick = (id: string) => {
     navigate(`/details/${id}?${searchParams.toString()}`);
   };
-
+  console.log('items', items);
   return (
     <div className="wrapper">
       <SearchPanel
@@ -79,7 +47,7 @@ const App = () => {
             <CardList
               items={items}
               handleOnCardClick={handleOnCardClick}
-              total={total}
+              total={data?.count ? +data.count : 0}
             />
             <Outlet />
           </div>

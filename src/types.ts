@@ -18,3 +18,10 @@ export interface IPeopleDetails {
   height: string;
   mass: string;
 }
+
+export interface IResponse<T> {
+  count: string;
+  next: string;
+  previous: string;
+  results: T;
+}
