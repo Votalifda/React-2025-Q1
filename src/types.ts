@@ -1,5 +1,11 @@
 export interface IForm {
   name: string;
+  age: string;
+  email: string;
+  password: string;
+  password_confirm: string;
   gender: string;
-  birth_year: string;
+  country: string;
+  terms: string;
+  image: string;
 }

@@ -9,8 +9,8 @@ const initialState: SelectedItemsState = {
   items: [],
 };
 
-const selectedItemsSlice = createSlice({
-  name: 'selectedItems',
+const formsSlice = createSlice({
+  name: 'forms',
   initialState,
   reducers: {
     addItem: (state, action: PayloadAction<IForm>) => {
@@ -19,5 +19,5 @@ const selectedItemsSlice = createSlice({
   },
 });
 
-export const { addItem } = selectedItemsSlice.actions;
-export default selectedItemsSlice.reducer;
+export const { addItem } = formsSlice.actions;
+export default formsSlice.reducer;

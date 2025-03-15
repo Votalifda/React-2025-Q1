@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
-import selectedItemsReducer from './slices/selectedItemsSlice';
+import formsReducer from './slices/formsSlice.ts';
 
 export const store = configureStore({
   reducer: {
-    selectedItems: selectedItemsReducer,
+    forms: formsReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
