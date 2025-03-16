@@ -1,5 +1,3 @@
-import './App.css';
-
 const Page404 = () => {
   return (
     <div className="page404">

@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { FieldError, Merge } from 'react-hook-form';
 
 interface Props {
-  error?: Merge<FieldError, (FieldError | undefined)[]> | undefined;
+  error?: Merge<FieldError, (FieldError | undefined)[]> | undefined | Error;
 }
 
 const Index: FC<Props> = ({ error }) => {

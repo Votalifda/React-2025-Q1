@@ -1,3 +1,7 @@
+#root {
+  width: 100%;
+}
+
 body {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -8,7 +12,6 @@ body {
   min-height: 100vh;
   box-sizing: content-box;
 }
-
 
 .loader-container {
   display: flex;

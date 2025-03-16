@@ -1,6 +1,6 @@
 export interface IForm {
   name: string;
-  age: number;
+  age: number | string;
   email: string;
   password: string;
   password_confirm: string;
@@ -13,3 +13,5 @@ export interface IForm {
 export interface IFormValues extends Omit<IForm, 'image'> {
   image: string;
 }
+
+export type Errors = { [key: string]: Error };
