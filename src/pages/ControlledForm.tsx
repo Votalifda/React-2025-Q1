@@ -85,7 +85,7 @@ const ControlledForm = () => {
             defaultValue=""
             control={control}
             render={({ field: { ...field } }) => (
-              <input {...field} className="input" />
+              <input {...field} type="password" className="input" />
             )}
           />
           <ValidationError error={errors.password} />
@@ -97,7 +97,7 @@ const ControlledForm = () => {
             defaultValue=""
             control={control}
             render={({ field: { ...field } }) => (
-              <input {...field} className="input" />
+              <input {...field} type="password" className="input" />
             )}
           />
           <ValidationError error={errors.password_confirm} />

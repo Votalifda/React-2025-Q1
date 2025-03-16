@@ -16,7 +16,7 @@ const defaultSchema = yup.object().shape({
   age: yup
     .number()
     .typeError('Age must be a number')
-    .positive('Age cannot be negative')
+    .positive('Age should be positive value')
     .integer('Age must be an integer')
     .required('This field is required'),
   password: yup

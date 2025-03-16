@@ -88,7 +88,12 @@ const UncontrolledForm = () => {
         </div>
         <div className="form-control">
           <label htmlFor="password">Password</label>
-          <input name="password" ref={passwordRef} className="input" />
+          <input
+            name="password"
+            ref={passwordRef}
+            type="password"
+            className="input"
+          />
           <ValidationError error={errors.password} />
         </div>
         <div className="form-control">
@@ -96,6 +101,7 @@ const UncontrolledForm = () => {
           <input
             name="password_confirm"
             ref={passwordConfirmRef}
+            type="password"
             className="input"
           />
           <ValidationError error={errors.password_confirm} />
