@@ -101,20 +101,31 @@ label {
 
 .cards-list {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
   gap: 10px;
 }
 
 .card {
-  display: flex;
-  flex-direction: column;
+  width: 300px;
+  display: grid;
+  grid-template-columns: 100px 1fr;
   gap: 10px;
-  padding: 10px;
+  padding: 20px;
   border-radius: 4px;
+  font-size: 14px;
+}
+
+.card.latest {
+  border: 3px solid blue;
 }
 
 .card-item {
 
+}
+
+.card-title {
+  font-weight: bold;
 }
 
 .error {

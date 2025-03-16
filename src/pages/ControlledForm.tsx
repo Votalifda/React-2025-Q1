@@ -2,55 +2,94 @@ import { Controller, useForm } from 'react-hook-form';
 import { IForm } from '../types.ts';
 import { FormEvent } from 'react';
 import ValidationError from '../components/ValidationError';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addItem } from '../store/slices/formsSlice.ts';
 import { Link, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { emailPattern } from '../validationRules.ts';
+import Autocomplete from '../components/Autocomplete';
+import { RootState } from '../store/store.ts';
 
 const defaultSchema = yup.object().shape({
-  name: yup.string().required('This field is required'),
+  name: yup
+    .string()
+    .matches(/^[A-Z]/, 'Name must start with an uppercase letter')
+    .required('This field is required'),
   email: yup
     .string()
+    .email('Invalid Email Address')
     .required('This field is required')
-    .test(
-      'is-empty-or-match',
-      'Invalid Email Address',
-      function (value: string) {
-        return value === '' || emailPattern.value.test(value);
-      }
-    ),
-  age: yup.string().required(),
-  password: yup.string().required(),
-  password_confirm: yup.string().required(),
-  gender: yup.string().required(),
-  country: yup.string().required(),
+    .test('is-empty-or-match', 'Invalid Email Address', function (value) {
+      return value === '' || emailPattern.value.test(value);
+    }),
+  age: yup
+    .number()
+    .typeError('Age must be a number')
+    .positive('Age cannot be negative')
+    .integer('Age must be an integer')
+    .required('This field is required'),
+  password: yup
+    .string()
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+      'Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character'
+    )
+    .required('This field is required'),
+  password_confirm: yup
+    .string()
+    .oneOf([yup.ref('password')], 'Passwords must match')
+    .required('This field is required'),
+  gender: yup
+    .string()
+    .required('This field is required')
+    .oneOf(['Male', 'Female', ''], 'Invalid gender')
+    .required('This field is required'),
+  country: yup.string().required('This field is required'),
   terms: yup
     .boolean()
     .oneOf([true], 'You must accept the terms')
     .required('This field is required'),
-  image: yup.string().required(),
+  image: yup
+    .mixed<File>()
+    .test('type', 'Only PNG and JPEG are allowed', (value) => {
+      if (!value) return false;
+      return ['image/png', 'image/jpeg'].includes(value.type);
+    })
+    .test('size', 'File size must be less than 2MB', (value) => {
+      if (!value) return false;
+      return value.size <= 2 * 1024 * 1024;
+    })
+    .required('This field is required'),
 });
-
 const ControlledForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const countries = useSelector((state: RootState) => state.countries.items);
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm<IForm>({
-    mode: 'onBlur',
+    mode: 'onChange',
     resolver: yupResolver<IForm>(defaultSchema),
   });
 
-  const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const fileToBase64 = async (file: File) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = (error) => reject(error);
+    });
+  };
+
+  const handleFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    handleSubmit(
-      (data) => {
-        console.log('handleFormSubmit', data);
-        dispatch(addItem(data));
+    await handleSubmit(
+      async (data) => {
+        const file64 = await fileToBase64(data.image);
+        dispatch(addItem({ ...data, image: file64 as string }));
         navigate('/');
       },
       (errors) => {
@@ -79,7 +118,6 @@ const ControlledForm = () => {
           <label htmlFor="age">Age</label>
           <Controller
             name="age"
-            defaultValue=""
             control={control}
             render={({ field: { ...field } }) => (
               <input {...field} className="input" />
@@ -140,6 +178,41 @@ const ControlledForm = () => {
           <ValidationError error={errors.gender} />
         </div>
         <div className="form-control">
+          <label htmlFor="country">Country</label>
+          <Controller
+            name="country"
+            defaultValue=""
+            control={control}
+            render={({ field: { ...field } }) => (
+              <Autocomplete
+                items={countries}
+                value={String(field.value)}
+                onChange={field.onChange}
+              />
+            )}
+          />
+          <ValidationError error={errors.password_confirm} />
+        </div>
+        <div className="form-control">
+          <label htmlFor="image">Image</label>
+          <Controller
+            name="image"
+            control={control}
+            render={({ field }) => (
+              <input
+                name={field.name}
+                type="file"
+                className="input"
+                accept="image/png, image/jpeg"
+                onChange={(e) =>
+                  e.target.files?.[0] && field.onChange(e.target.files?.[0])
+                }
+              />
+            )}
+          />
+          <ValidationError error={errors.image} />
+        </div>
+        <div className="form-control">
           <div className="row">
             <label htmlFor="terms">Terms and Conditions agreement</label>
             <Controller
@@ -159,7 +232,9 @@ const ControlledForm = () => {
           <ValidationError error={errors.terms} />
         </div>
         <div className="form-actions">
-          <button type="submit">Submit</button>
+          <button type="submit" disabled={!isValid}>
+            Submit
+          </button>
         </div>
       </form>
       <Link to="/">Back to Main Page</Link>

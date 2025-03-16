@@ -14,8 +14,12 @@ const Main = () => {
       </div>
       <div className="cards-list">
         {!!items.length &&
-          items.map((item) => (
-            <Card key={`${item.name}_${item.age}_${item.gender}`} item={item} />
+          items.map((item, key) => (
+            <Card
+              key={`${item.name}_${item.age}_${item.gender}`}
+              item={item}
+              isLatest={items.length === key + 1}
+            />
           ))}
       </div>
     </div>

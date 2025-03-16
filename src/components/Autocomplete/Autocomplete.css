@@ -1,0 +1,36 @@
+.autocomplete {
+    position: relative;
+    width: 250px;
+}
+
+.autocomplete-input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+}
+
+.suggestions {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    background: white;
+    border: 1px solid #ccc;
+    margin-top: 5px;
+    padding: 0;
+    list-style: none;
+    max-height: 150px;
+    overflow-y: auto;
+    border-radius: 4px;
+}
+
+.suggestionItem {
+    padding: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.suggestionItem:hover {
+    background: #f0f0f0;
+}

@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IForm } from '../../types.ts';
+import { IFormValues } from '../../types.ts';
 
-interface SelectedItemsState {
-  items: Array<IForm>;
+interface State {
+  items: Array<IFormValues>;
 }
 
-const initialState: SelectedItemsState = {
+const initialState: State = {
   items: [],
 };
 
@@ -13,7 +13,7 @@ const formsSlice = createSlice({
   name: 'forms',
   initialState,
   reducers: {
-    addItem: (state, action: PayloadAction<IForm>) => {
+    addItem: (state, action: PayloadAction<IFormValues>) => {
       state.items.push(action.payload);
     },
   },
