@@ -6,6 +6,6 @@ export interface IForm {
   password_confirm: string;
   gender: string;
   country: string;
-  terms: string;
+  terms: boolean;
   image: string;
 }

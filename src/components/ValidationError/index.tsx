@@ -6,7 +6,7 @@ interface Props {
 }
 
 const Index: FC<Props> = ({ error }) => {
-  return !!error && <div className={`error`}>{error.message}</div>;
+  return !!error && <div className="error">{error.message}</div>;
 };
 
 export default Index;
