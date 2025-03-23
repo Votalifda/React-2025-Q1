@@ -1,0 +1,78 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+}
+
+.filters {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px;
+  padding: 10px;
+  border: 1px solid grey;
+  border-radius: 5px;
+}
+
+.form-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.results {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 20px;
+  border: 1px solid grey;
+  border-radius: 5px;
+}
+
+.country {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px;
+  border: 1px solid grey;
+  border-radius: 5px;
+}
+
+.country.visited {
+  border-color: purple;
+  border-width: 2px;
+}
+
+.country-card {
+  display: grid;
+  grid-template-columns: 50px 200px 200px 150px;
+  align-items: center;
+  gap: 5px;
+}
+
+.country button, .country-details button {
+  display: flex;
+  align-self: center;
+  height: 70%;
+  background-color: lightgray;
+}
+
+.country-details {
+  position: sticky;
+  top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid grey;
+  border-radius: 5px;
+  padding: 20px;
+  height: 100%;
+}
