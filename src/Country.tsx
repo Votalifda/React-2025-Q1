@@ -1,4 +1,4 @@
-import {FC} from "react";
+import {FC, memo, useCallback} from "react";
 import {ICountry} from "./types.ts";
 
 interface Props {
@@ -7,9 +7,9 @@ interface Props {
 }
 
 const Country: FC<Props> = ({ item, onView }) => {
-    const handleOnView = () => {
+    const handleOnView = useCallback(() => {
         onView(item.ccn3);
-    }
+    }, [item, onView]);
 
     return (
         <li className={`country ${item.visited && 'visited'}`}>
@@ -24,4 +24,4 @@ const Country: FC<Props> = ({ item, onView }) => {
     );
 };
 
-export default Country;
+export default memo(Country);

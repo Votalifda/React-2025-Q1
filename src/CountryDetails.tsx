@@ -1,4 +1,4 @@
-import {FC} from "react";
+import {FC, memo} from "react";
 import {ICountry} from "./types.ts";
 
 interface Props {
@@ -18,4 +18,4 @@ const Country: FC<Props> = ({ item, onClose }) => {
     );
 };
 
-export default Country;
+export default memo(Country);

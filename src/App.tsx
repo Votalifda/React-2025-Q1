@@ -1,4 +1,4 @@
-import React, {useState, useEffect, FC} from "react";
+import React, {useState, useEffect, FC, useCallback, useMemo} from "react";
 import {ICountry} from "./types.ts";
 import Country from "./Country.tsx";
 import CountryDetails from "./CountryDetails.tsx";
@@ -6,7 +6,6 @@ import './App.css'
 
 const App: FC = () => {
     const [countries, setCountries] = useState<ICountry[]>([]);
-    const [filteredCountries, setFilteredCountries] = useState<ICountry[]>([]);
     const [selectedCountry, setSelectedCountry] = useState<ICountry | null>(null);
     const [search, setSearch] = useState("");
     const [region, setRegion] = useState("All");
@@ -20,11 +19,6 @@ const App: FC = () => {
 
     const setVisited = (ccn3: string) => {
         localStorage.setItem("visited", JSON.stringify([...getVisited(), ccn3]));
-
-        setFilteredCountries(prevState => prevState.map((item) => ({
-            ...item,
-            visited: getVisited().includes(item.ccn3)
-        })));
     }
 
     useEffect(() => {
@@ -33,9 +27,8 @@ const App: FC = () => {
             .then((data) => setCountries(data));
     }, []);
 
-    const filterCountries = () => {
-
-        const res =  countries
+    const filteredCountries = useMemo(() => {
+        return countries
             .filter((country) =>
                 region === "All" ? true : country.region === region
             )
@@ -57,41 +50,41 @@ const App: FC = () => {
                 ...item,
                 visited: getVisited().includes(item.ccn3)
             }));
+    }, [countries, search, region, sortBy, sortOrder, selectedCountry]);
 
-        setFilteredCountries(res);
-    };
-
-    useEffect(() => {
-        filterCountries();
-    }, [countries, search, region, sortBy, sortOrder]);
-
-    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleSearch = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         setSearch(e.target.value);
-    };
+    }, []);
 
-    const handleRegionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const handleRegionChange = useCallback(
+        (e: React.ChangeEvent<HTMLSelectElement>) => {
             setRegion(e.target.value);
-        };
+        },
+        []
+    );
 
-    const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const handleSortChange = useCallback(
+        (e: React.ChangeEvent<HTMLSelectElement>) => {
             setSortBy(e.target.value);
-        };
+        },
+        []
+    );
 
-    const handleSortOrderChange = () => {
+    const handleSortOrderChange = useCallback(() => {
         setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"));
-    };
+    }, []);
 
-    const handleOnCloseSelectedCountry = () => {
+    const handleOnCloseSelectedCountry = useCallback(() => {
         setSelectedCountry(null)
-    }
+    }, []);
 
-    const handleOnViewCountry = (ccn3: string) => {
+    const handleOnViewCountry = useCallback((ccn3: string) => {
         const country = countries.find((item) => item.ccn3 === ccn3);
         if (country) {
             setSelectedCountry(country);
             setVisited(country.ccn3)
         }
-    }
+    }, [countries]);
 
     return (
         <div className="wrapper">
@@ -126,7 +119,7 @@ const App: FC = () => {
                 </div>
                 <ul className="results">
                     {filteredCountries.map((item) => (
-                        <Country item={item} onView={handleOnViewCountry}/>
+                        <Country key={item.ccn3} item={item} onView={handleOnViewCountry}/>
                     ))}
                 </ul>
             </div>
